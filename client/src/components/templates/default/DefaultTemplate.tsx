@@ -23,8 +23,7 @@ export default ({ headTitle, description, children }: Props) => {
             {headTitle}
           </div>
         </div>
-
-        <div tw="md:ml-14 mt-10 text-2xl text-white opacity-60">
+        <div tw="md:ml-14 mt-10 text-2xl text-white opacity-80">
           <p>{description}</p>
           {children}
         </div>

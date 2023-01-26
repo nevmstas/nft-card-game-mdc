@@ -1,12 +1,16 @@
 import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import tw, { styled } from "twin.macro";
-import { Home } from "./components/pages";
+import { CreateBattle, Home } from "./components/pages";
 
 function App() {
   return (
-    <div>
-      <Home />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/create-battle" element={<CreateBattle />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

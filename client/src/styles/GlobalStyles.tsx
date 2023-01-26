@@ -4,6 +4,7 @@ import tw, { css, theme, GlobalStyles as BaseStyles } from "twin.macro";
 
 const customStyles = css({
   body: {
+    backgroundColor: "#161A1D",
     fontFamily: ["Nunito", "sans-serif"],
   },
 });

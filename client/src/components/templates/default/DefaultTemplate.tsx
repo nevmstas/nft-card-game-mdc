@@ -1,22 +1,35 @@
-import tw from "twin.macro";
+import tw, { theme } from "twin.macro";
 import { Divider } from "../../atoms";
+import { GiEvilEyes, GiEvilLove } from "react-icons/gi";
 
 interface Props {
   children?: React.ReactNode;
-  headTitle: string;
+  headTitle: React.ReactNode;
   description?: string;
 }
 
 export default ({ headTitle, description, children }: Props) => {
   return (
-    <div tw="bg-indigo-500">
-      <div tw="max-w-4xl mx-auto px-2.5 bg-indigo-500">
-        <div tw="flex h-40 items-end">
+    <div tw="bg-grey">
+      <div tw="max-w-6xl mx-auto px-2.5 flex flex-col items-center md:items-start">
+        <GiEvilEyes tw="-ml-6 h-20 w-20 text-red-light my-10" />
+        <div tw="h-40 flex items-center">
           <Divider type="vertical" size="lg" />
-          <h1 tw="text-8xl text-white ml-5 m-0">{headTitle}</h1>
+          <div tw={"text-white md:text-5xl text-3xl ml-7"}>{headTitle}</div>
         </div>
-        <p tw="text-blue-200">{description}</p>
-        {children}
+
+        <div tw="ml-14 mt-10 text-2xl text-white opacity-60">
+          <p>{description}</p>
+          {children}
+        </div>
+        <footer tw="ml-14 text-xl text-white flex space-x-2 items-center absolute bottom-10 right-24">
+          <span>Made with</span>
+          <GiEvilLove tw="text-red-light" />
+          <span>by</span>
+          <a tw="underline" href="https://github.com/nevmstas">
+            nevmstas
+          </a>
+        </footer>
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ interface Props {
 
 export default ({ headTitle, description, children }: Props) => {
   return (
-    <div tw="bg-grey">
+    <div>
       <div tw="max-w-6xl mx-auto px-2.5 flex flex-col items-center md:items-start text-center md:text-start">
         <GiEvilHand tw="md:-ml-6 h-20 w-20 text-red-light my-10" />
         <div tw="h-40 flex items-center">
@@ -23,8 +23,8 @@ export default ({ headTitle, description, children }: Props) => {
             {headTitle}
           </div>
         </div>
-        <div tw="md:ml-14 mt-10 text-2xl text-white opacity-80">
-          <p>{description}</p>
+        <div tw="md:ml-14 mt-10 text-2xl text-white">
+          <p tw="opacity-80">{description}</p>
           {children}
         </div>
         <footer tw="md:ml-14 text-xl text-white flex space-x-2 items-center absolute bottom-10 self-center">

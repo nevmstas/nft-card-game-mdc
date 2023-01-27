@@ -40,13 +40,13 @@ export const WalletContextProvider = ({
 
   useEffect(() => {
     const setSmartContractAndProvider = async () => {
-      const web3Modal = new Web3Modal();
-      const instance = await web3Modal.connect();
-      const provider = new ethers.providers.Web3Provider(instance);
-      const signer = provider.getSigner();
+      // const web3Modal = new Web3Modal();
+      // const instance = await web3Modal.connect();
+      // const provider = new ethers.providers.Web3Provider(instance);
+      // const signer = provider.getSigner();
       //TODO: params from deployed contract ADDRESS, ABI
-      const contract = new ethers.Contract("", "", signer);
-      console.log(contract);
+      // const contract = new ethers.Contract("", "", signer);
+      // console.log(contract);
     };
     setSmartContractAndProvider();
   });

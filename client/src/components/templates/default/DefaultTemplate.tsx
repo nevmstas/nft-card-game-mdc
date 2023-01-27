@@ -1,6 +1,6 @@
 import tw, { theme } from "twin.macro";
 import { Divider } from "../../atoms";
-import { GiEvilEyes, GiEvilLove } from "react-icons/gi";
+import { GiEvilHand, GiEvilLove } from "react-icons/gi";
 
 interface Props {
   children?: React.ReactNode;
@@ -12,7 +12,7 @@ export default ({ headTitle, description, children }: Props) => {
   return (
     <div tw="bg-grey">
       <div tw="max-w-6xl mx-auto px-2.5 flex flex-col items-center md:items-start text-center md:text-start">
-        <GiEvilEyes tw="md:-ml-6 h-20 w-20 text-red-light my-10" />
+        <GiEvilHand tw="md:-ml-6 h-20 w-20 text-red-light my-10" />
         <div tw="h-40 flex items-center">
           <Divider
             className="opacity-0 md:opacity-100"

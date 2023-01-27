@@ -9,8 +9,9 @@ export default () => {
       <DefaultTemplate
         headTitle={
           <>
-            Welcome to <span tw="text-red-light">Magic Dungeon Creatures</span>{" "}
-            <br /> a <span tw="text-violet-500">Web3</span> NFT Card Game
+            Welcome to <br />
+            <span tw="text-red-light">Magic Dungeon Creatures</span> <br /> a{" "}
+            <span tw="text-violet-500">Web3</span> NFT Card Game
           </>
         }
         description="Connect your wallet to start playing the ultimate Web3 Battle Game"

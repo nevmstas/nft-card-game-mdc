@@ -1,3 +1,4 @@
 import useWallet from "./use-wallet";
+import useToast from "./use-toast";
 
-export { useWallet };
+export { useWallet, useToast };

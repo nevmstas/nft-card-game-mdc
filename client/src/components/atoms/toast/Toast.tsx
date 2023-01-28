@@ -1,4 +1,5 @@
-import React from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useCallback, useEffect } from "react";
 import {
   GiMimicChest,
   GiOpenTreasureChest,
@@ -8,61 +9,94 @@ import {
 import { VscClose } from "react-icons/vsc";
 import tw, { css } from "twin.macro";
 
-interface IToast {
-  type: "error" | "warning" | "success" | "info";
+export enum EToastType {
+  ERROR = "error",
+  WARNING = "warning",
+  INFO = "info",
+  SUCCESS = "success",
+}
+export interface IToast {
+  id: string;
+  type: EToastType;
   message: string;
-  onClose: () => void;
+  close: (id: string) => void;
 }
 
 const commonIconStyles = tw`w-10 h-10 mr-3 rounded-full flex items-center justify-center text-white`;
 
 const icons = {
-  error: (
+  [EToastType.ERROR]: (
     <div css={[tw`bg-red-light`, commonIconStyles]}>
       <GiMimicChest />
     </div>
   ),
-  warning: (
+  [EToastType.WARNING]: (
     <div css={[tw`bg-orange-400`, commonIconStyles]}>
       <GiBurningBook />
     </div>
   ),
-  success: (
+  [EToastType.SUCCESS]: (
     <div css={[tw`bg-green-400`, commonIconStyles]}>
       <GiOpenTreasureChest />
     </div>
   ),
-  info: (
+  [EToastType.INFO]: (
     <div css={[tw`bg-blue-400`, commonIconStyles]}>
       <GiSpellBook />
     </div>
   ),
 };
 
-export default ({ message, type, onClose }: IToast) => {
+const DURATION = 3000;
+
+export default ({ message, type, close, id }: IToast) => {
   const icon = icons[type];
 
   const bgColors = {
-    success: tw`bg-green-200 shadow-green-400`,
-    error: tw`bg-[#FF7276] shadow-[#FF7276]`,
-    warning: tw`bg-orange-200 shadow-orange-200`,
-    info: tw`bg-blue-200 shadow-blue-200`,
+    [EToastType.SUCCESS]: tw`bg-green-200 shadow-green-400`,
+    [EToastType.ERROR]: tw`bg-[#FF7276] shadow-[#FF7276]`,
+    [EToastType.WARNING]: tw`bg-orange-200 shadow-orange-200`,
+    [EToastType.INFO]: tw`bg-blue-200 shadow-blue-200`,
   };
 
   const base = [
-    tw`absolute w-auto md:right-3 top-3 m-3 flex rounded-2xl p-2 justify-between items-center md:w-64 text-black text-lg shadow`,
+    tw`m-3 flex rounded-2xl p-2 justify-between items-center w-64 text-black text-lg shadow`,
     bgColors[type],
   ];
 
+  useEffect(() => {
+    if (!DURATION) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      close(id);
+    }, DURATION);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [id]);
+
+  const handleClose = useCallback(() => {
+    close(id);
+  }, [id]);
+
   return (
-    <div css={base}>
+    <motion.div
+      css={base}
+      layout
+      initial={{ opacity: 0, y: -50, scale: 0.3 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, scale: 0 }}
+    >
       <div tw="flex items-center">
-        <div tw="w-20">{icon}</div>
+        <div tw="w-12">{icon}</div>
         {message}
       </div>
       <div tw="cursor-pointer h-10 w-10 rounded-full flex items-center justify-center">
-        <VscClose onClick={onClose} />
+        <VscClose onClick={handleClose} />
       </div>
-    </div>
+    </motion.div>
   );
 };

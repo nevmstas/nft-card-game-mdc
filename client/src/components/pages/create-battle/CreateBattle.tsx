@@ -1,7 +1,9 @@
 import React from "react";
+import { useToast } from "../../../hooks";
 import { DefaultTemplate } from "../../templates";
 
 export default () => {
+  const { show } = useToast();
   return (
     <DefaultTemplate
       headTitle={
@@ -11,7 +13,7 @@ export default () => {
       }
       description="Create you own battle and wait for others players to join you"
     >
-      <div>Create battle</div>
+      <div></div>
     </DefaultTemplate>
   );
 };

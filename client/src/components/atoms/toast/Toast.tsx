@@ -8,6 +8,7 @@ import {
 } from "react-icons/gi";
 import { VscClose } from "react-icons/vsc";
 import tw, { css } from "twin.macro";
+import { ToastId } from "./consts";
 
 export enum EToastType {
   ERROR = "error",
@@ -16,7 +17,7 @@ export enum EToastType {
   SUCCESS = "success",
 }
 export interface IToast {
-  id: string;
+  id: ToastId;
   type: EToastType;
   message: string;
   close: (id: string) => void;
@@ -78,9 +79,7 @@ export default ({ message, type, close, id }: IToast) => {
     };
   }, [id]);
 
-  const handleClose = useCallback(() => {
-    close(id);
-  }, [id]);
+  const handleClose = () => close(id);
 
   return (
     <motion.div

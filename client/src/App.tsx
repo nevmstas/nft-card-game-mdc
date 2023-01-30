@@ -7,16 +7,16 @@ import { ToastContextProvider } from "./context/toast/ToastContext";
 
 function App() {
   return (
-    <WalletContextProvider>
-      <ToastContextProvider>
+    <ToastContextProvider>
+      <WalletContextProvider>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/create-battle" element={<CreateBattle />} />
           </Routes>
         </BrowserRouter>
-      </ToastContextProvider>
-    </WalletContextProvider>
+      </WalletContextProvider>
+    </ToastContextProvider>
   );
 }
 

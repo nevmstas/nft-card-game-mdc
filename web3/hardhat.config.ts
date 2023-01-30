@@ -4,11 +4,6 @@ import "@nomicfoundation/hardhat-toolbox";
 
 dotenv.config();
 
-// export default {
-//   solidity: {
-//     version: "0.8.17",
-//   }
-
 const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.17",

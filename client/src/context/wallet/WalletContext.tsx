@@ -6,8 +6,7 @@ import React, {
   useState,
 } from "react";
 
-import { ethers } from "ethers";
-import Web3Modal from "web3modal";
+const { ethereum } = window;
 
 interface IWalletContext {
   walletAddress: string;
@@ -17,7 +16,6 @@ export const WalletContext = createContext<IWalletContext>({
   walletAddress: "",
 });
 
-//TODO: separate wallet & transaction contexts
 export const WalletContextProvider = ({
   children,
 }: {
@@ -26,30 +24,20 @@ export const WalletContextProvider = ({
   const [walletAddress, setWalletAddress] = useState("");
 
   const updateCurrentWalletAddress = async () => {
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccount",
-    });
-
-    if (accounts) setWalletAddress(accounts[0]);
+    try {
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      if (accounts) setWalletAddress(accounts[0]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     updateCurrentWalletAddress();
     window.ethereum.on("accountsChanged", updateCurrentWalletAddress);
-  });
-
-  useEffect(() => {
-    const setSmartContractAndProvider = async () => {
-      // const web3Modal = new Web3Modal();
-      // const instance = await web3Modal.connect();
-      // const provider = new ethers.providers.Web3Provider(instance);
-      // const signer = provider.getSigner();
-      //TODO: params from deployed contract ADDRESS, ABI
-      // const contract = new ethers.Contract("", "", signer);
-      // console.log(contract);
-    };
-    setSmartContractAndProvider();
-  });
+  }, []);
 
   return (
     <WalletContext.Provider value={{ walletAddress }}>

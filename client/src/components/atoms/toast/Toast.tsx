@@ -61,7 +61,7 @@ export default ({ message, type, close, id }: IToast) => {
   };
 
   const base = [
-    tw`m-3 flex rounded-2xl p-2 justify-between items-center w-64 text-black text-lg shadow`,
+    tw`m-3 flex rounded-2xl p-2 justify-between items-center max-w-xs text-black shadow`,
     bgColors[type],
   ];
 

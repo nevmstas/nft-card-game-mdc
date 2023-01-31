@@ -21,10 +21,13 @@ export const ToastContextProvider = ({
   const [toasts, setToasts] = useState<IToast[]>([]);
 
   //TODO: fix first element delete issue
-  const close = (id: string) => {
-    const newArr = [...toasts.filter((toast) => toast.id !== id)];
-    setToasts(newArr);
-  };
+  const close = useCallback(
+    (id: string) => {
+      const newArr = [...toasts.filter((toast) => toast.id !== id)];
+      setToasts(newArr);
+    },
+    [toasts]
+  );
 
   const show = useCallback(
     (toastConfig: Pick<IToast, "id" | "message" | "type">) => {
@@ -37,14 +40,16 @@ export const ToastContextProvider = ({
 
   return (
     <ToastContext.Provider value={{ show }}>
-      {children}
-      <div tw="absolute right-4 top-4">
-        <AnimatePresence>
-          {toasts.map((toast) => (
-            <Toast key={toast.id} {...toast} />
-          ))}
-        </AnimatePresence>
-      </div>
+      <>
+        {children}
+        <div tw="absolute right-4 top-4">
+          <AnimatePresence>
+            {toasts.map((toast) => (
+              <Toast key={toast.id} {...toast} />
+            ))}
+          </AnimatePresence>
+        </div>
+      </>
     </ToastContext.Provider>
   );
 };

@@ -4,17 +4,20 @@ import tw, { styled } from "twin.macro";
 import { CreateBattle, Home } from "./components/pages";
 import { WalletContextProvider } from "./context/wallet/WalletContext";
 import { ToastContextProvider } from "./context/toast/ToastContext";
+import { GameContextProvider } from "./context/game/GameContext";
 
 function App() {
   return (
     <ToastContextProvider>
       <WalletContextProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/create-battle" element={<CreateBattle />} />
-          </Routes>
-        </BrowserRouter>
+        <GameContextProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/create-battle" element={<CreateBattle />} />
+            </Routes>
+          </BrowserRouter>
+        </GameContextProvider>
       </WalletContextProvider>
     </ToastContextProvider>
   );

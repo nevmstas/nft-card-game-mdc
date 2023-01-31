@@ -5,6 +5,13 @@ import React, {
   useRef,
   useState,
 } from "react";
+import {
+  errorMsg,
+  successMsg,
+  ToastId,
+} from "../../components/atoms/toast/consts";
+import { EToastType } from "../../components/atoms/toast/Toast";
+import { useToast } from "../../hooks";
 
 const { ethereum } = window;
 
@@ -21,16 +28,32 @@ export const WalletContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const { show } = useToast();
   const [walletAddress, setWalletAddress] = useState("");
 
   const updateCurrentWalletAddress = async () => {
     try {
+      if (!ethereum)
+        show({
+          id: "error-no-ethereum-object",
+          message: errorMsg.NO_ETHEREUM_OBJECT,
+          type: EToastType.ERROR,
+        });
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
       if (accounts) setWalletAddress(accounts[0]);
+      show({
+        id: "metamask-connected",
+        message: successMsg.METAMASK_CONNECTED,
+        type: EToastType.SUCCESS,
+      });
     } catch (error) {
-      console.log(error);
+      show({
+        id: "error-installmetamask",
+        message: errorMsg.INSTALL_METAMASK,
+        type: EToastType.ERROR,
+      });
     }
   };
 

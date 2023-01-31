@@ -14,6 +14,7 @@ export default defineConfig({
   },
   plugins: [
     react({
+      fastRefresh: false,
       babel: {
         plugins: [
           "babel-plugin-macros",

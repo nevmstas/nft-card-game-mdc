@@ -1,8 +1,13 @@
-export type ToastId = "error-installmetamask" | "error-no-ethereum-object";
+export type ToastId =
+  | "something-went-wrong"
+  | "error-installmetamask"
+  | "error-no-ethereum-object"
+  | "metamask-connected";
 
 export const errorMsg = {
   INSTALL_METAMASK: "Please install metamask",
   NO_ETHEREUM_OBJECT: "No ethereum object",
+  SOMETHING_WENT_WRONG: "Something went wrong",
 };
 
 export const successMsg = {

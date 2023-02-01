@@ -1,6 +1,8 @@
 import React from "react";
 import { useToast } from "../../../hooks";
+import InputField from "../../atoms/input-field";
 import { DefaultTemplate } from "../../templates";
+import tw from "twin.macro";
 
 export default () => {
   const { show } = useToast();
@@ -13,7 +15,9 @@ export default () => {
       }
       description="Create you own battle and wait for others players to join you"
     >
-      <div></div>
+      <div tw="w-80 mt-10">
+        <InputField label="Battle name" placeholder="Enter the battle name" />
+      </div>
     </DefaultTemplate>
   );
 };

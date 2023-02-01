@@ -1,6 +1,7 @@
 import React from "react";
 import tw from "twin.macro";
 import MonsterImg from "../../../assets/illustrations/monster-background.jpg";
+import Button from "../../atoms/button/Button";
 import InputField from "../../atoms/input-field/InputField";
 import { DefaultTemplate } from "../../templates";
 
@@ -21,8 +22,9 @@ export default () => {
           tw="absolute left-0 top-0 opacity-30 -z-10 object-cover md:object-fill h-full md:w-full"
           src={MonsterImg}
         ></img>
-        <div tw="mt-10 w-80">
+        <div tw="mt-10 w-80 space-y-3">
           <InputField label="Name" placeholder="Enter the name" />
+          <Button label="Register" />
         </div>
       </DefaultTemplate>
     </>

@@ -15,7 +15,7 @@ export default () => {
       }
       description="Create you own battle and wait for others players to join you"
     >
-      <div tw="w-80 mt-10">
+      <div tw="mt-10">
         <InputField label="Battle name" placeholder="Enter the battle name" />
       </div>
     </DefaultTemplate>

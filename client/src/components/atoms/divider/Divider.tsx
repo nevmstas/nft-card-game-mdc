@@ -12,7 +12,7 @@ export default ({
   type = "horizontal",
   size = "sm",
   style = "light",
-  className,
+  ...props
 }: Props) => {
   const color = style === "dark" ? tw`bg-black` : tw`bg-red-light`;
   const sizes = {
@@ -26,5 +26,5 @@ export default ({
 
   const base = [color, positionTypes[type], sizes[size]];
 
-  return <div css={base} className={className}></div>;
+  return <div css={base} {...props}></div>;
 };

@@ -13,12 +13,8 @@ export default ({ headTitle, description, children }: Props) => {
     <div>
       <div tw="max-w-6xl mx-auto px-2.5 flex flex-col items-center md:items-start text-center md:text-start">
         <GiEvilHand tw="md:-ml-6 h-20 w-20 text-red-light my-10" />
-        <div tw="h-40 flex items-center">
-          <Divider
-            className="opacity-0 md:opacity-100"
-            type="vertical"
-            size="lg"
-          />
+        <div tw="md:h-40 h-20 flex items-center">
+          <Divider tw="opacity-0 md:opacity-100" type="vertical" size="lg" />
           <div tw={"text-white md:text-5xl text-3xl md:ml-7 -ml-7"}>
             {headTitle}
           </div>

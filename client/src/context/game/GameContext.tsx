@@ -6,10 +6,15 @@ import { ABI, ADDRESS } from "../../contract";
 import { useToast, useWallet } from "../../hooks";
 import { EToastType } from "../../components/atoms/toast/Toast";
 import { errorMsg } from "../../components/atoms/toast/consts";
+import { noop } from "../../components/utils";
 
-interface IGameContext {}
+interface IGameContext {
+  registerPlayer: ({}: { name: string }) => Promise<void>;
+}
 
-export const GameContext = createContext<IGameContext>({});
+export const GameContext = createContext<IGameContext>({
+  registerPlayer: noop.async,
+});
 
 export const GameContextProvider = ({
   children,
@@ -17,6 +22,7 @@ export const GameContextProvider = ({
   children: React.ReactNode;
 }) => {
   const { show } = useToast();
+  const { walletAddress } = useWallet();
   const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
   const [contract, setContract] = useState<ethers.Contract>();
 
@@ -41,5 +47,32 @@ export const GameContextProvider = ({
     }
   }, []);
 
-  return <GameContext.Provider value={{}}>{children}</GameContext.Provider>;
+  const registerPlayer = async ({ name }: { name: string }) => {
+    try {
+      console.log({ name });
+      const playerExists = await contract?.isPlayer(walletAddress);
+      console.log({ playerExists });
+      if (!playerExists) {
+        console.log({ contract });
+        await contract?.registerPlayer(name);
+        show({
+          type: EToastType.SUCCESS,
+          id: "player-registered-successfully",
+          message: `${name} is being summoned!`,
+        });
+      }
+    } catch (error: any) {
+      show({
+        type: EToastType.ERROR,
+        id: "player-register-error",
+        message: error.message,
+      });
+    }
+  };
+
+  return (
+    <GameContext.Provider value={{ registerPlayer }}>
+      {children}
+    </GameContext.Provider>
+  );
 };

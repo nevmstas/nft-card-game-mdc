@@ -43,11 +43,6 @@ export const WalletContextProvider = ({
         method: "eth_requestAccounts",
       });
       if (accounts) setWalletAddress(accounts[0]);
-      show({
-        id: "metamask-connected",
-        message: successMsg.METAMASK_CONNECTED,
-        type: EToastType.SUCCESS,
-      });
     } catch (error) {
       show({
         id: "error-installmetamask",

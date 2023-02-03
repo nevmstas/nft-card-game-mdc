@@ -8,6 +8,18 @@ import InputField from "../../atoms/input-field/InputField";
 import { DefaultTemplate } from "../../templates";
 
 export default () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ name: string }>();
+
+  const { registerPlayer } = useGame();
+
+  const onSubmit = ({ name }: { name: string }) => {
+    registerPlayer({ name });
+  };
+
   return (
     <>
       <DefaultTemplate
@@ -24,8 +36,14 @@ export default () => {
           tw="absolute left-0 top-0 opacity-30 -z-10 object-cover md:object-fill h-full md:w-full"
           src={MonsterImg}
         ></img>
-        <form tw="mt-10 space-y-6">
-          <InputField label="Name" placeholder="Enter the name" />
+        <form onSubmit={handleSubmit(onSubmit)} tw="mt-10 space-y-6">
+          <InputField
+            id="name"
+            {...register("name")}
+            label="Name"
+            placeholder="Enter the name"
+            errorMessage={errors.name?.message}
+          />
           <Button label="Register" />
         </form>
       </DefaultTemplate>

@@ -7,6 +7,8 @@ import { useToast, useWallet } from "../../hooks";
 import { EToastType } from "../../components/atoms/toast/Toast";
 import { errorMsg } from "../../components/atoms/toast/consts";
 import { noop } from "../../components/utils";
+import { useNavigate } from "react-router-dom";
+import createEventListeners from "../../utils/create-event-listeners";
 
 interface IGameContext {
   registerPlayer: ({}: { name: string }) => Promise<void>;
@@ -25,6 +27,8 @@ export const GameContextProvider = ({
   const { walletAddress } = useWallet();
   const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
   const [contract, setContract] = useState<ethers.Contract>();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     try {
@@ -47,18 +51,33 @@ export const GameContextProvider = ({
     }
   }, []);
 
+  useEffect(() => {
+    if (contract && provider)
+      createEventListeners({
+        navigate,
+        provider,
+        contract,
+        walletAddress,
+        show,
+      });
+  }, []);
+
   const registerPlayer = async ({ name }: { name: string }) => {
     try {
       console.log({ name });
       const playerExists = await contract?.isPlayer(walletAddress);
-      console.log({ playerExists });
       if (!playerExists) {
-        console.log({ contract });
-        await contract?.registerPlayer(name);
+        await contract?.registerPlayer(name, name);
         show({
           type: EToastType.SUCCESS,
-          id: "player-registered-successfully",
+          id: "player-summoned-successfully",
           message: `${name} is being summoned!`,
+        });
+      } else {
+        show({
+          type: EToastType.INFO,
+          id: "player-already-exists",
+          message: `${name} is already exists!`,
         });
       }
     } catch (error: any) {

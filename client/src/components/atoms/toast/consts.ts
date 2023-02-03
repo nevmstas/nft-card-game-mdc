@@ -4,7 +4,9 @@ export type ToastId =
   | "error-no-ethereum-object"
   | "metamask-connected"
   | "player-register-error"
-  | "player-registered-successfully";
+  | "player-registered-successfully"
+  | "player-summoned-successfully"
+  | "player-already-exists";
 
 export const errorMsg = {
   INSTALL_METAMASK: "Please install metamask",

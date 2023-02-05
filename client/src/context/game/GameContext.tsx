@@ -64,7 +64,6 @@ export const GameContextProvider = ({
 
   const registerPlayer = async ({ name }: { name: string }) => {
     try {
-      console.log({ name });
       const playerExists = await contract?.isPlayer(walletAddress);
       if (!playerExists) {
         await contract?.registerPlayer(name, name);

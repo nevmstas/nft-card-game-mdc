@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 
 pragma solidity ^0.8.16;
+import "hardhat/console.sol";
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
@@ -40,9 +41,17 @@ contract MagicalDungeonCreatures is ERC1155 {
   /// @param _metadataURI baseURI where token metadata is stored
   constructor(string memory _metadataURI) ERC1155(_metadataURI) {
     baseURI = _metadataURI;
+    initialize();
   }
 
+  function initialize() private {
+    gameTokens.push(GameToken("", 0, 0, 0));
+    players.push(Player(address(0), "", 0, 0, false));
+  }
+
+
   function isPlayer(address addr) public view returns (bool) {
+    console.log("isPlayer func", addr, playerInfo[addr] == 0);
     if(playerInfo[addr] == 0) {
       return false;
     } else {
@@ -54,7 +63,11 @@ contract MagicalDungeonCreatures is ERC1155 {
     require(isPlayer(addr), "Player doesn't exist!");
     return players[playerInfo[addr]];
   }
-  
+
+  function getAllPlayers() public view returns (Player[] memory) {
+    return players;
+  }
+
   /// @dev Registers a player
   /// @param _name player name; set by player
   function registerPlayer(string memory _name, string memory _gameTokenName) external {
@@ -63,7 +76,7 @@ contract MagicalDungeonCreatures is ERC1155 {
     uint256 _id = players.length;
     players.push(Player(msg.sender, _name, 10, 25, false)); // Adds player to players array
     playerInfo[msg.sender] = _id; // Creates player info mapping
-
+    
     createRandomGameToken(_gameTokenName);
     
     emit NewPlayer(msg.sender, _name); // Emits NewPlayer event

@@ -35,9 +35,8 @@ export default ({
 }: IProps) => {
   const newPlayerEventFilter = contract.filters.NewPlayer();
 
-  console.log({ newPlayerEventFilter });
-
   addNewEvent(newPlayerEventFilter, provider, ({ args }) => {
+    console.log(args.owner, walletAddress);
     if (args.owner === walletAddress) {
       show({
         type: EToastType.SUCCESS,

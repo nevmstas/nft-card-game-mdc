@@ -2,7 +2,6 @@
 
 pragma solidity ^0.8.16;
 import "hardhat/console.sol";
-
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 contract MagicalDungeonCreatures is ERC1155 {
@@ -66,6 +65,14 @@ contract MagicalDungeonCreatures is ERC1155 {
 
   function getAllPlayers() public view returns (Player[] memory) {
     return players;
+  }
+  
+  function isPlayerToken(address addr) public view returns (bool) {
+    if(playerTokenInfo[addr] == 0) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   /// @dev Registers a player

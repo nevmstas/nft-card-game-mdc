@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
@@ -12,10 +12,12 @@ import createEventListeners from "../../utils/create-event-listeners";
 
 interface IGameContext {
   registerPlayer: ({}: { name: string }) => Promise<void>;
+  isPlayerTokenExists: boolean;
 }
 
 export const GameContext = createContext<IGameContext>({
   registerPlayer: noop.async,
+  isPlayerTokenExists: false,
 });
 
 export const GameContextProvider = ({
@@ -27,6 +29,7 @@ export const GameContextProvider = ({
   const { walletAddress } = useWallet();
   const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
   const [contract, setContract] = useState<ethers.Contract>();
+  const [isPlayerTokenExists, setIsPlayerTokenExist] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -62,34 +65,51 @@ export const GameContextProvider = ({
       });
   }, []);
 
-  const registerPlayer = async ({ name }: { name: string }) => {
-    try {
-      const playerExists = await contract?.isPlayer(walletAddress);
-      if (!playerExists) {
-        await contract?.registerPlayer(name, name);
+  const registerPlayer = useCallback(
+    async ({ name }: { name: string }) => {
+      try {
+        const playerExists = await contract?.isPlayer(walletAddress);
+        if (!playerExists) {
+          await contract?.registerPlayer(name, name);
+          show({
+            type: EToastType.SUCCESS,
+            id: "player-summoned-successfully",
+            message: `${name} is being summoned!`,
+          });
+        } else {
+          show({
+            type: EToastType.INFO,
+            id: "player-already-exists",
+            message: `${name} is already exists!`,
+          });
+        }
+      } catch (error: any) {
         show({
-          type: EToastType.SUCCESS,
-          id: "player-summoned-successfully",
-          message: `${name} is being summoned!`,
-        });
-      } else {
-        show({
-          type: EToastType.INFO,
-          id: "player-already-exists",
-          message: `${name} is already exists!`,
+          type: EToastType.ERROR,
+          id: "player-register-error",
+          message: error.message,
         });
       }
-    } catch (error: any) {
-      show({
-        type: EToastType.ERROR,
-        id: "player-register-error",
-        message: error.message,
-      });
-    }
-  };
+    },
+    [contract]
+  );
+
+  useEffect(() => {
+    const setIsPlayerToken = async () => {
+      const playerExists: boolean = await contract?.isPlayer(walletAddress);
+      const isTokenExitsts: boolean = await contract?.isPlayerToken(
+        walletAddress
+      );
+
+      console.log({ playerExists, isTokenExitsts });
+
+      setIsPlayerTokenExist(playerExists && isTokenExitsts);
+    };
+    setIsPlayerToken();
+  }, [contract, walletAddress]);
 
   return (
-    <GameContext.Provider value={{ registerPlayer }}>
+    <GameContext.Provider value={{ registerPlayer, isPlayerTokenExists }}>
       {children}
     </GameContext.Provider>
   );

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import MonsterImg from "../../../assets/illustrations/monster-background.jpg";
 import { useGame } from "../../../hooks";
@@ -14,7 +15,12 @@ export default () => {
     formState: { errors },
   } = useForm<{ name: string }>();
 
-  const { registerPlayer } = useGame();
+  const { registerPlayer, isPlayerTokenExists } = useGame();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    isPlayerTokenExists && navigate("create-battle");
+  }, [isPlayerTokenExists]);
 
   const onSubmit = ({ name }: { name: string }) => {
     registerPlayer({ name });

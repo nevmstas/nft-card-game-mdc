@@ -1,4 +1,5 @@
 import CreateBattle from "./create-battle";
+import JoinBattle from "./join-battle";
 import Home from "./home";
 
-export { CreateBattle, Home };
+export { CreateBattle, Home, JoinBattle };

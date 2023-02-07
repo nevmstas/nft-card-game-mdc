@@ -37,11 +37,8 @@ export default () => {
           </>
         }
         description="Connect your wallet to start playing the ultimate Web3 Battle Game"
+        img={MonsterImg}
       >
-        <img
-          tw="absolute left-0 top-0 opacity-30 -z-10 object-cover md:object-fill h-full md:w-full"
-          src={MonsterImg}
-        ></img>
         <form onSubmit={handleSubmit(onSubmit)} tw="mt-10 space-y-6">
           <InputField
             id="name"

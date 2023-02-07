@@ -6,9 +6,10 @@ interface Props {
   children?: React.ReactNode;
   headTitle: React.ReactNode;
   description?: string;
+  img: string;
 }
 
-export default ({ headTitle, description, children }: Props) => {
+export default ({ headTitle, description, children, img }: Props) => {
   return (
     <div>
       <div tw="max-w-6xl mx-auto px-2.5 flex flex-col items-center md:items-start text-center md:text-start">
@@ -22,6 +23,10 @@ export default ({ headTitle, description, children }: Props) => {
         <div tw="md:ml-14 mt-10 text-2xl text-white">
           <p tw="opacity-80">{description}</p>
           {children}
+          <img
+            tw="absolute left-0 top-0 opacity-30 -z-10 object-cover md:object-fill h-full md:w-full"
+            src={img}
+          ></img>
         </div>
         <footer tw="md:ml-14 text-xl text-white flex space-x-2 items-center absolute bottom-10 self-center">
           <span>Made with</span>

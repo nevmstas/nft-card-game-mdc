@@ -31,6 +31,8 @@ export const GameContextProvider = ({
   const [contract, setContract] = useState<ethers.Contract>();
   const [isPlayerTokenExists, setIsPlayerTokenExist] = useState<boolean>(false);
 
+  console.log(walletAddress);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,12 +67,22 @@ export const GameContextProvider = ({
       });
   }, []);
 
+  const setIsPlayerToken = useCallback(async () => {
+    const playerExists: boolean = await contract?.isPlayer(walletAddress);
+    const isTokenExitsts: boolean = await contract?.isPlayerToken(
+      walletAddress
+    );
+
+    setIsPlayerTokenExist(playerExists && isTokenExitsts);
+  }, [contract, walletAddress]);
+
   const registerPlayer = useCallback(
     async ({ name }: { name: string }) => {
       try {
         const playerExists = await contract?.isPlayer(walletAddress);
         if (!playerExists) {
           await contract?.registerPlayer(name, name);
+          setIsPlayerToken();
           show({
             type: EToastType.SUCCESS,
             id: "player-summoned-successfully",
@@ -95,17 +107,8 @@ export const GameContextProvider = ({
   );
 
   useEffect(() => {
-    const setIsPlayerToken = async () => {
-      const playerExists: boolean = await contract?.isPlayer(walletAddress);
-      const isTokenExitsts: boolean = await contract?.isPlayerToken(
-        walletAddress
-      );
-
-      console.log({ playerExists, isTokenExitsts });
-
-      setIsPlayerTokenExist(playerExists && isTokenExitsts);
-    };
     setIsPlayerToken();
+    if (isPlayerTokenExists) navigate("/");
   }, [contract, walletAddress]);
 
   return (

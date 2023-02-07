@@ -10,6 +10,8 @@ contract MagicalDungeonCreatures is ERC1155 {
 
   uint256 public constant MAX_ATTACK_DEFEND_STRENGTH = 10;
 
+  enum BattleStatus{ PENDING, STARTED, ENDED }
+
   /// @dev Player struct to store player info
   struct Player {
     address playerAddress; /// @param playerAddress player wallet address
@@ -27,11 +29,23 @@ contract MagicalDungeonCreatures is ERC1155 {
     uint256 defenseStrength; /// @param defenseStrength battle card defense; generated randomly
   }
 
+  /// @dev Battle struct to store battle info
+  struct Battle {
+    BattleStatus battleStatus; /// @param battleStatus enum to indicate battle status
+    bytes32 battleHash; /// @param battleHash a hash of the battle name
+    string name; /// @param name battle name; set by player who creates battle
+    address[2] players; /// @param players address array representing players in this battle
+    uint8[2] moves; /// @param moves uint array representing players' move
+    address winner; /// @param winner winner address
+  }
+
   Player[] public players; // Array of players
   GameToken[] public gameTokens; // Array of game tokens
+  Battle[] public battles; // Array of battles
 
   mapping(address => uint256) public playerInfo;
   mapping(address => uint256) public playerTokenInfo; // Mapping of player addresses to player token index in the gameTokens array
+  mapping(string => uint256) public battleInfo; // Mapping of battle name to battle index in the battles array
 
   event NewPlayer(address indexed owner, string name);
   event NewGameToken(address indexed owner, uint256 id, uint256 attackStrength, uint256 defenseStrength);
@@ -46,12 +60,22 @@ contract MagicalDungeonCreatures is ERC1155 {
   function initialize() private {
     gameTokens.push(GameToken("", 0, 0, 0));
     players.push(Player(address(0), "", 0, 0, false));
+    battles.push(Battle(BattleStatus.PENDING, bytes32(0), "", [address(0), address(0)], [0, 0], address(0)));
   }
 
 
   function isPlayer(address addr) public view returns (bool) {
     console.log("isPlayer func", addr, playerInfo[addr] == 0);
     if(playerInfo[addr] == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  // Battle getter function
+  function isBattle(string memory _name) public view returns (bool) {
+    if(battleInfo[_name] == 0) {
       return false;
     } else {
       return true;
@@ -137,5 +161,29 @@ contract MagicalDungeonCreatures is ERC1155 {
     require(isPlayer(msg.sender), "Please Register Player First"); // Require that the player is registered
     
     _createGameToken(_name); // Creates game token
+  }
+
+   /// @dev Creates a new battle
+  /// @param _name battle name; set by player
+  function createBattle(string memory _name) external returns (Battle memory) {
+    require(isPlayer(msg.sender), "Please Register Player First"); // Require that the player is registered
+    require(!isBattle(_name), "Battle already exists!"); // Require battle with same name should not exist
+
+    bytes32 battleHash = keccak256(abi.encode(_name));
+    
+    Battle memory _battle = Battle(
+      BattleStatus.PENDING, // Battle pending
+      battleHash, // Battle hash
+      _name, // Battle name
+      [msg.sender, address(0)], // player addresses; player 2 empty until they joins battle
+      [0, 0], // moves for each player
+      address(0) // winner address; empty until battle ends
+    );
+
+    uint256 _id = battles.length;
+    battleInfo[_name] = _id;
+    battles.push(_battle);
+    
+    return _battle;
   }
 }

@@ -90,6 +90,10 @@ contract MagicalDungeonCreatures is ERC1155 {
   function getAllPlayers() public view returns (Player[] memory) {
     return players;
   }
+
+  function getAllBattles() public view returns (Battle[] memory) {
+    return battles;
+  }
   
   function isPlayerToken(address addr) public view returns (bool) {
     if(playerTokenInfo[addr] == 0) {

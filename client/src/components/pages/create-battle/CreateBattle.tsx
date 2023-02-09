@@ -7,6 +7,7 @@ import tw from "twin.macro";
 import { Button } from "../../atoms";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { GameLoad } from "../../organisms";
 
 export default () => {
   const { show } = useToast();
@@ -31,6 +32,7 @@ export default () => {
       description="Create you own battle and wait for others players to join you"
       img={MonsterImg}
     >
+      <GameLoad />
       <div tw="mt-10">
         <form onSubmit={handleSubmit(onSubmit)}>
           <InputField

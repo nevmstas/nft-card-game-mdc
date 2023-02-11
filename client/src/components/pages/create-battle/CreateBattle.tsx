@@ -1,5 +1,5 @@
 import React from "react";
-import { useToast } from "../../../hooks";
+import { useGame, useToast } from "../../../hooks";
 import InputField from "../../atoms/input-field";
 import { DefaultTemplate } from "../../templates";
 import MonsterImg from "../../../assets/illustrations/monster-background.jpg";
@@ -11,17 +11,23 @@ import { GameLoad } from "../../organisms";
 
 export default () => {
   const { show } = useToast();
+  const { createBattle, waitBattle } = useGame();
   const navigate = useNavigate();
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm<{ battleName: string }>();
+
   const handleLinkClick = () => {
     navigate("/join-battle");
   };
 
-  const onSubmit = () => {};
+  const onSubmit = ({ battleName }: { battleName: string }) => {
+    if (!battleName || !battleName.trim()) return null;
+    createBattle({ battleName });
+  };
+
   return (
     <DefaultTemplate
       headTitle={
@@ -32,7 +38,7 @@ export default () => {
       description="Create you own battle and wait for others players to join you"
       img={MonsterImg}
     >
-      <GameLoad />
+      {waitBattle && <GameLoad />}
       <div tw="mt-10">
         <form onSubmit={handleSubmit(onSubmit)}>
           <InputField

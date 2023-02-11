@@ -6,7 +6,8 @@ export type ToastId =
   | "player-register-error"
   | "player-registered-successfully"
   | "player-summoned-successfully"
-  | "player-already-exists";
+  | "player-already-exists"
+  | "started-to-find-opponent"
 
 export const errorMsg = {
   INSTALL_METAMASK: "Please install metamask",

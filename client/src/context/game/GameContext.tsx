@@ -10,18 +10,61 @@ import { noop } from "../../components/utils";
 import { useNavigate } from "react-router-dom";
 import createEventListeners from "../../utils/create-event-listeners";
 
+interface IBattle {
+  battleHash: string;
+  battleStatus: number;
+  moves: [number, number];
+  name: string;
+  players: [string, string];
+  winner: string;
+}
+
+interface IGameData {
+  players: [string, string];
+  pendingBattles: IBattle[];
+  activeBattle: IBattle | null;
+}
 interface IGameContext {
   registerPlayer: ({}: { name: string }) => Promise<void>;
   createBattle: ({}: { battleName: string }) => Promise<void>;
   isPlayerTokenExists: boolean;
   waitBattle: boolean;
+  gameData: IGameData;
 }
+
+const preparedBattlesData = (
+  battles: IBattle[],
+  walletAddress: string
+): IGameData => {
+  const pendingBattles = battles.filter((battle) => battle.battleStatus === 0);
+  let activeBattle: IBattle | null = null;
+  battles.forEach((battle) => {
+    if (
+      battle.players.find(
+        (player) => player.toLowerCase() === walletAddress.toLowerCase()
+      )
+    ) {
+      if (battle.winner.startsWith("0x00")) activeBattle = battle;
+    }
+  });
+
+  return {
+    pendingBattles: pendingBattles.slice(1),
+    activeBattle,
+    players: ["", ""],
+  };
+};
 
 export const GameContext = createContext<IGameContext>({
   registerPlayer: noop.async,
   createBattle: noop.async,
   isPlayerTokenExists: false,
   waitBattle: false,
+  gameData: {
+    pendingBattles: [],
+    activeBattle: null,
+    players: ["", ""],
+  },
 });
 
 export const GameContextProvider = ({
@@ -35,6 +78,11 @@ export const GameContextProvider = ({
   const [contract, setContract] = useState<ethers.Contract>();
   const [isPlayerTokenExists, setIsPlayerTokenExist] = useState<boolean>(false);
   const [waitBattle, setWaitBattle] = useState(false);
+  const [gameData, setGameData] = useState<IGameData>({
+    activeBattle: null,
+    pendingBattles: [],
+    players: ["", ""],
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -71,8 +119,11 @@ export const GameContextProvider = ({
 
   useEffect(() => {
     const fetchBattleGames = async () => {
-      const battles = await contract?.getAllBattles();
+      const battles: IBattle[] = await contract?.getAllBattles();
       console.log(battles);
+      const gameData = preparedBattlesData(battles, walletAddress);
+
+      setGameData(gameData);
     };
     if (contract) fetchBattleGames();
   }, [contract]);
@@ -85,6 +136,12 @@ export const GameContextProvider = ({
 
     setIsPlayerTokenExist(playerExists && isTokenExitsts);
   }, [contract, walletAddress]);
+
+  useEffect(() => {
+    if (gameData.activeBattle?.battleStatus === 0) {
+      setWaitBattle(true);
+    }
+  }, [gameData]);
 
   const registerPlayer = useCallback(
     async ({ name }: { name: string }) => {
@@ -144,7 +201,13 @@ export const GameContextProvider = ({
 
   return (
     <GameContext.Provider
-      value={{ registerPlayer, isPlayerTokenExists, createBattle, waitBattle }}
+      value={{
+        registerPlayer,
+        isPlayerTokenExists,
+        createBattle,
+        waitBattle,
+        gameData,
+      }}
     >
       {children}
     </GameContext.Provider>

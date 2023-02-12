@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useGame, useToast } from "../../../hooks";
 import InputField from "../../atoms/input-field";
 import { DefaultTemplate } from "../../templates";
@@ -10,8 +10,7 @@ import { useForm } from "react-hook-form";
 import { GameLoad } from "../../organisms";
 
 export default () => {
-  const { show } = useToast();
-  const { createBattle, waitBattle } = useGame();
+  const { createBattle, waitBattle, gameData } = useGame();
   const navigate = useNavigate();
   const {
     register,

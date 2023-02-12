@@ -1,9 +1,15 @@
 import React from "react";
 import MonsterImg from "../../../assets/illustrations/monster-background.jpg";
+import { useGame } from "../../../hooks";
+import { BattleItem } from "../../organisms";
 import { DefaultTemplate } from "../../templates";
+import tw from "twin.macro";
 
 export default () => {
-  console.log("join baltt");
+  const {
+    gameData: { pendingBattles },
+  } = useGame();
+  console.log(pendingBattles);
   return (
     <DefaultTemplate
       headTitle={
@@ -14,7 +20,12 @@ export default () => {
       description="Join already existing battle"
       img={MonsterImg}
     >
-      <div tw="mt-10">Join battle page</div>
+      <div tw="mt-10 ml-3 font-bold">Available battles:</div>
+      <div tw="flex flex-col">
+        {pendingBattles.map((battle, idx) => (
+          <BattleItem key={battle.name + idx} battle={battle} number={idx + 1} />
+        ))}
+      </div>
     </DefaultTemplate>
   );
 };

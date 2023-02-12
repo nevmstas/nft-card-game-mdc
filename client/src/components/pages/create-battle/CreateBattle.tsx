@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { GameLoad } from "../../organisms";
 
 export default () => {
-  const { createBattle, waitBattle, gameData } = useGame();
+  const { createBattle, waitBattle } = useGame();
   const navigate = useNavigate();
   const {
     register,

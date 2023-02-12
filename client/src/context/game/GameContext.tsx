@@ -10,7 +10,7 @@ import { noop } from "../../components/utils";
 import { useNavigate } from "react-router-dom";
 import createEventListeners from "../../utils/create-event-listeners";
 
-interface IBattle {
+export interface IBattle {
   battleHash: string;
   battleStatus: number;
   moves: [number, number];
@@ -36,7 +36,10 @@ const preparedBattlesData = (
   battles: IBattle[],
   walletAddress: string
 ): IGameData => {
-  const pendingBattles = battles.filter((battle) => battle.battleStatus === 0);
+  const pendingBattles = battles.filter(
+    (battle) =>
+      battle.battleStatus === 0 && !battle.players.includes(walletAddress)
+  );
   let activeBattle: IBattle | null = null;
   battles.forEach((battle) => {
     if (
@@ -120,7 +123,6 @@ export const GameContextProvider = ({
   useEffect(() => {
     const fetchBattleGames = async () => {
       const battles: IBattle[] = await contract?.getAllBattles();
-      console.log(battles);
       const gameData = preparedBattlesData(battles, walletAddress);
 
       setGameData(gameData);

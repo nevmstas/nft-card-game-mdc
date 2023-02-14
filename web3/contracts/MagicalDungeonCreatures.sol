@@ -48,6 +48,7 @@ contract MagicalDungeonCreatures is ERC1155 {
   mapping(string => uint256) public battleInfo; // Mapping of battle name to battle index in the battles array
 
   event NewPlayer(address indexed owner, string name);
+  event NewBattle(string battleName, address indexed player1, address indexed player2);
   event NewGameToken(address indexed owner, uint256 id, uint256 attackStrength, uint256 defenseStrength);
 
   /// @dev Initializes the contract by setting a `metadataURI` to the token collection
@@ -80,6 +81,16 @@ contract MagicalDungeonCreatures is ERC1155 {
     } else {
       return true;
     }
+  }
+
+  function getBattle(string memory _name) public view returns (Battle memory) {
+    require(isBattle(_name), "Battle doesn't exist!");
+    return battles[battleInfo[_name]];
+  }
+  
+  function updateBattle(string memory _name, Battle memory _newBattle) private {
+    require(isBattle(_name), "Battle doesn't exist");
+    battles[battleInfo[_name]] = _newBattle;
   }
 
   function getPlayer(address addr) public view returns (Player memory) {
@@ -188,6 +199,26 @@ contract MagicalDungeonCreatures is ERC1155 {
     battleInfo[_name] = _id;
     battles.push(_battle);
     
+    return _battle;
+  }
+
+  /// @dev Player joins battle
+  /// @param _name battle name; name of battle player wants to join
+  function joinBattle(string memory _name) external returns (Battle memory) {
+    Battle memory _battle = getBattle(_name);
+
+    require(_battle.battleStatus == BattleStatus.PENDING, "Battle already started!"); // Require that battle has not started
+    require(_battle.players[0] != msg.sender, "Only player two can join a battle"); // Require that player 2 is joining the battle
+    require(!getPlayer(msg.sender).inBattle, "Already in battle"); // Require that player is not already in a battle
+    
+    _battle.battleStatus = BattleStatus.STARTED;
+    _battle.players[1] = msg.sender;
+    updateBattle(_name, _battle);
+
+    players[playerInfo[_battle.players[0]]].inBattle = true;
+    players[playerInfo[_battle.players[1]]].inBattle = true;
+
+    emit NewBattle(_battle.name, _battle.players[0], msg.sender); // Emits NewBattle event
     return _battle;
   }
 }

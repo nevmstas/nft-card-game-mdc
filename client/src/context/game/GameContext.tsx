@@ -149,6 +149,7 @@ export const GameContextProvider = ({
     async ({ name }: { name: string }) => {
       try {
         const playerExists = await contract?.isPlayer(walletAddress);
+        console.log(playerExists);
         if (!playerExists) {
           await contract?.registerPlayer(name, name);
           setIsPlayerToken();
@@ -168,7 +169,7 @@ export const GameContextProvider = ({
         show({
           type: EToastType.ERROR,
           id: "player-register-error",
-          message: error.message,
+          message: errorMsg.SOMETHING_WENT_WRONG,
         });
       }
     },
@@ -188,10 +189,19 @@ export const GameContextProvider = ({
       } catch (e: any) {
         show({
           type: EToastType.ERROR,
-          id: "player-register-error",
-          message: e.message,
+          id: "battle-already-exists",
+          message: errorMsg.BATTLE_ALREADY_EXISTS,
         });
       }
+    },
+    [contract]
+  );
+
+  const joinBattle = useCallback(
+    async ({ battleName }: { battleName: string }) => {
+      try {
+        await contract?.joinBattle(battleName);
+      } catch (e: any) {}
     },
     [contract]
   );

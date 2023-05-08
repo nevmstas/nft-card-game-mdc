@@ -8,11 +8,13 @@ export type ToastId =
   | "player-summoned-successfully"
   | "player-already-exists"
   | "started-to-find-opponent"
+  | "battle-already-exists";
 
 export const errorMsg = {
   INSTALL_METAMASK: "Please install metamask",
   NO_ETHEREUM_OBJECT: "No ethereum object",
   SOMETHING_WENT_WRONG: "Something went wrong",
+  BATTLE_ALREADY_EXISTS: "Battle already exists",
 };
 
 export const successMsg = {

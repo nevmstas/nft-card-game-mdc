@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from "framer-motion";
-import React, { useCallback, useEffect } from "react";
+import { motion } from "framer-motion";
+import React, { useEffect } from "react";
 import {
   GiMimicChest,
   GiOpenTreasureChest,
@@ -7,7 +7,7 @@ import {
   GiBurningBook,
 } from "react-icons/gi";
 import { VscClose } from "react-icons/vsc";
-import tw, { css } from "twin.macro";
+import tw from "twin.macro";
 import { ToastId } from "./consts";
 
 export enum EToastType {

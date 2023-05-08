@@ -9,7 +9,6 @@ export default () => {
   const {
     gameData: { pendingBattles },
   } = useGame();
-  console.log(pendingBattles);
   return (
     <DefaultTemplate
       headTitle={
@@ -23,7 +22,11 @@ export default () => {
       <div tw="mt-10 ml-3 font-bold">Available battles:</div>
       <div tw="flex flex-col">
         {pendingBattles.map((battle, idx) => (
-          <BattleItem key={battle.name + idx} battle={battle} number={idx + 1} />
+          <BattleItem
+            key={battle.name + idx}
+            battle={battle}
+            number={idx + 1}
+          />
         ))}
       </div>
     </DefaultTemplate>

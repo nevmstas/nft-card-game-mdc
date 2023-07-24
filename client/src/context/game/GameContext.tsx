@@ -30,6 +30,7 @@ interface IGameContext {
   isPlayerTokenExists: boolean;
   waitBattle: boolean;
   gameData: IGameData;
+  joinBattle: ({}: { battleName: string }) => Promise<void>;
 }
 
 const preparedBattlesData = (
@@ -61,6 +62,7 @@ const preparedBattlesData = (
 export const GameContext = createContext<IGameContext>({
   registerPlayer: noop.async,
   createBattle: noop.async,
+  joinBattle: noop.async,
   isPlayerTokenExists: false,
   waitBattle: false,
   gameData: {
@@ -86,6 +88,7 @@ export const GameContextProvider = ({
     pendingBattles: [],
     players: ["", ""],
   });
+  const [updateGameData, setUpdateGameData] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -117,6 +120,7 @@ export const GameContextProvider = ({
         contract,
         walletAddress,
         show,
+        setUpdateGameData,
       });
   }, []);
 
@@ -219,6 +223,7 @@ export const GameContextProvider = ({
         createBattle,
         waitBattle,
         gameData,
+        joinBattle
       }}
     >
       {children}

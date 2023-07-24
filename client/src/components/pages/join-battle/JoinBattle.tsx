@@ -9,6 +9,7 @@ export default () => {
   const {
     gameData: { pendingBattles },
   } = useGame();
+
   return (
     <DefaultTemplate
       headTitle={

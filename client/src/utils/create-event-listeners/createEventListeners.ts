@@ -24,6 +24,7 @@ interface IProps {
   walletAddress: string;
   navigate: NavigateFunction;
   show: (toastConfig: Pick<IToast, "id" | "message" | "type">) => void;
+  setUpdateGameData: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default ({
@@ -32,6 +33,7 @@ export default ({
   walletAddress,
   navigate,
   show,
+  setUpdateGameData,
 }: IProps) => {
   const newPlayerEventFilter = contract.filters.NewPlayer();
 
@@ -45,5 +47,19 @@ export default ({
       });
       navigate("create-battle");
     }
+  });
+
+  const newBattleEventFilter = contract.filters.NewBattle();
+
+  addNewEvent(newBattleEventFilter, provider, ({ args }) => {
+    console.log("new battle started", args, walletAddress);
+
+    if (
+      walletAddress.toLowerCase() === args.player1.toLowerCase() ||
+      walletAddress.toLocaleLowerCase() === args.player2.toLowerCase()
+    ) {
+      navigate(`/battle/${args.battleName}`);
+    }
+    setUpdateGameData((prev) => prev + 1);
   });
 };

@@ -8,7 +8,8 @@ export type ToastId =
   | "player-summoned-successfully"
   | "player-already-exists"
   | "started-to-find-opponent"
-  | "battle-already-exists";
+  | "battle-already-exists"
+  | "joining-battle";
 
 export const errorMsg = {
   INSTALL_METAMASK: "Please install metamask",

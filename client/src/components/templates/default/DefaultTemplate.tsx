@@ -24,7 +24,7 @@ export default ({ headTitle, description, children, img }: Props) => {
           <p tw="opacity-80">{description}</p>
           {children}
           <img
-            tw="absolute left-0 top-0 opacity-30 -z-10 object-cover md:object-fill h-full md:w-full"
+            tw="absolute left-0 top-0 opacity-30 -z-10 object-cover h-full md:w-full"
             src={img}
           ></img>
         </div>

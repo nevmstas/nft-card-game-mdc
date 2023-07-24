@@ -3,8 +3,15 @@ import tw from "twin.macro";
 import { Button } from "../../atoms";
 import ThreeDotsLoader from "../../atoms/three-dots-loader";
 import Avatar from "../../atoms/avatar/Avatar";
+import { useNavigate } from "react-router-dom";
 
 export default () => {
+  const navigate = useNavigate();
+
+  const handleClickChoose = () => {
+    navigate("/battle/battle-1");
+  };
+
   return (
     <>
       <div
@@ -14,7 +21,7 @@ export default () => {
         <Button
           label="Choose Battleground"
           tw="mt-6"
-          onClick={() => alert("go to choosing battlegrounds")}
+          onClick={handleClickChoose}
         />
         <div tw="h-full pt-80 uppercase space-y-20 flex flex-col items-center">
           <span>Waiting for opponent</span>

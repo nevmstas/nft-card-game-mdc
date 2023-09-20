@@ -1,6 +1,5 @@
 import tw from 'twin.macro'
 import Board from "../../../assets/illustrations/boards/dungeoun-board-2.png";
-import { HealtBar } from '../../atoms';
 
 const Battle = () => {
   return <div tw='flex'>

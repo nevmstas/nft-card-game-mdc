@@ -8,7 +8,6 @@ const addNewEvent = (
   provider: any,
   callback: (props: ethers.utils.LogDescription) => void
 ) => {
-  console.log({ eventFilter });
   provider.removeListener(eventFilter);
 
   provider.on(eventFilter, (logs: any) => {
@@ -35,10 +34,10 @@ export default ({
   show,
   setUpdateGameData,
 }: IProps) => {
-  const newPlayerEventFilter = contract.filters.NewPlayer();
+  const NewPlayerEventFilter = contract.filters.NewPlayer();
 
-  addNewEvent(newPlayerEventFilter, provider, ({ args }) => {
-    console.log(args.owner, walletAddress);
+  addNewEvent(NewPlayerEventFilter, provider, ({ args }) => {
+    console.log(123)
     if (args.owner === walletAddress) {
       show({
         type: EToastType.SUCCESS,
@@ -49,9 +48,9 @@ export default ({
     }
   });
 
-  const newBattleEventFilter = contract.filters.NewBattle();
+  const NewBattleEventFilter = contract.filters.NewBattle();
 
-  addNewEvent(newBattleEventFilter, provider, ({ args }) => {
+  addNewEvent(NewBattleEventFilter, provider, ({ args }) => {
     console.log("new battle started", args, walletAddress);
 
     if (

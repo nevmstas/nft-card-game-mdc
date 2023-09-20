@@ -27,6 +27,7 @@ export default () => {
     createBattle({ battleName });
   };
 
+
   return (
     <DefaultTemplate
       headTitle={

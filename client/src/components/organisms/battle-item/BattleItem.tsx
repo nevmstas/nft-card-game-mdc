@@ -1,10 +1,7 @@
-import { IBattle } from "../../../context/game/GameContext";
-import { Button } from "../../atoms";
-
+import { IBattle } from "../../../context/game/GameContext"
 import tw from "twin.macro";
 import { GiAxeSword } from "react-icons/gi";
-import { useGame, useToast } from "../../../hooks";
-import { EToastType } from "../../atoms/toast/Toast";
+import { useGame } from "../../../hooks";
 
 interface IBattleItem {
   battle: IBattle;
@@ -13,17 +10,10 @@ interface IBattleItem {
 
 export default ({ battle, number }: IBattleItem) => {
   const { joinBattle } = useGame();
-  const { show } = useToast();
   const handleJoinBattle = () => {
-    try {
-      show({
-        type: EToastType.INFO,
-        id: "joining-battle",
-        message: 'Joining battle'
-      })
-      joinBattle({ battleName: battle.name });
-    } catch {}
+    joinBattle({ battleName: battle.name });
   };
+
   return (
     <div
       tw="flex 

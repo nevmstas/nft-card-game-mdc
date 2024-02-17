@@ -25,12 +25,12 @@ interface IGameData {
   activeBattle: IBattle | null;
 }
 interface IGameContext {
-  registerPlayer: ({ }: { name: string }) => Promise<void>;
-  createBattle: ({ }: { battleName: string }) => Promise<void>;
+  registerPlayer: ({}: { name: string }) => Promise<void>;
+  createBattle: ({}: { battleName: string }) => Promise<void>;
   isPlayerTokenExists: boolean;
   waitBattle: boolean;
   gameData: IGameData;
-  joinBattle: ({ }: { battleName: string }) => Promise<void>;
+  joinBattle: ({}: { battleName: string }) => Promise<void>;
 }
 
 const preparedBattlesData = (
@@ -89,7 +89,6 @@ export const GameContextProvider = ({
     players: ["", ""],
   });
   const [updateGameData, setUpdateGameData] = useState(0);
-  console.log(updateGameData)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -123,18 +122,17 @@ export const GameContextProvider = ({
         show,
         setUpdateGameData,
       });
-  }, [contract]);
+  }, [contract, walletAddress]);
 
   useEffect(() => {
     const fetchBattleGames = async () => {
       const battles: IBattle[] = await contract?.getAllBattles();
-      console.log(battles)
       const gameData = preparedBattlesData(battles, walletAddress);
 
       setGameData(gameData);
     };
     if (contract) fetchBattleGames();
-  }, [contract, updateGameData]);
+  }, [contract, updateGameData, walletAddress]);
 
   const setIsPlayerToken = useCallback(async () => {
     const playerExists: boolean = await contract?.isPlayer(walletAddress);
@@ -146,14 +144,15 @@ export const GameContextProvider = ({
   }, [contract, walletAddress]);
 
   useEffect(() => {
-    console.log(gameData)
-    if(gameData.activeBattle?.battleStatus === 1){
-      navigate(`/battle/${gameData.activeBattle.name}`)
-    }
+    if (gameData)
+      if (gameData.activeBattle?.battleStatus === 1) {
+        navigate(`/battle/${gameData.activeBattle.name}`);
+      }
     if (gameData.activeBattle?.battleStatus === 0) {
+      navigate(`/create-battle`);
       setWaitBattle(true);
     }
-  }, [gameData]);
+  }, [gameData, walletAddress]);
 
   const registerPlayer = useCallback(
     async ({ name }: { name: string }) => {
@@ -215,13 +214,13 @@ export const GameContextProvider = ({
           type: EToastType.INFO,
           id: "joining-battle",
           message: `Joining ${battleName}`,
-        })
+        });
       } catch (e: any) {
         show({
           type: EToastType.ERROR,
           id: "something-went-wrong",
           message: errorMsg.SOMETHING_WENT_WRONG,
-        })
+        });
       }
     },
     [contract]
@@ -246,7 +245,7 @@ export const GameContextProvider = ({
         createBattle,
         waitBattle,
         gameData,
-        joinBattle
+        joinBattle,
       }}
     >
       {children}

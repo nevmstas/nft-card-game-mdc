@@ -10,7 +10,7 @@ interface IProps {
 }
 
 export default ({ size = "sm", Icon }: IProps) => {
-  const base = tw`rounded-full bg-violet-700 flex justify-center items-center text-white`;
+  const base = tw`rounded-full bg-transparent/50 flex justify-center items-center text-white`;
   const sizes = {
     sm: tw`w-10 h-10`,
     lg: tw`w-28 h-28`,
